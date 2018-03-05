@@ -21,6 +21,8 @@ module ActiveMerchant
     attr_accessor :read_timeout
     attr_accessor :verify_peer
     attr_accessor :ssl_version
+    attr_accessor :min_version
+    attr_accessor :max_version
     attr_accessor :ca_file
     attr_accessor :ca_path
     attr_accessor :pem
@@ -44,6 +46,8 @@ module ActiveMerchant
       @max_retries  = MAX_RETRIES
       @ignore_http_status = false
       @ssl_version = nil
+      @min_version = nil
+      @max_version = nil
       @proxy_address = nil
       @proxy_port = nil
     end
@@ -121,6 +125,10 @@ module ActiveMerchant
 
       http.use_ssl = true
       http.ssl_version = ssl_version if ssl_version
+      if http.respond_to?(:min_version=)
+        http.min_version = min_version if min_version
+        http.max_version = max_version if max_version
+      end
 
       if verify_peer
         http.verify_mode = OpenSSL::SSL::VERIFY_PEER
